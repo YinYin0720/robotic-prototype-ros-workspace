@@ -1,0 +1,27 @@
+<launch>
+  <!--
+  <node name="usb_cam" pkg="usb_cam" type="usb_cam_node">
+    <param name="video_device" value="/dev/video2" />
+    <param name="image_width" value="640" />
+    <param name="image_height" value="480" />
+    <param name="pixel_format" value="yuyv" />
+    <param name="camera_frame_id" value="usb_cam" />
+    <param name="to_method" value="mmap" />
+  </node>
+  <node name="image_view" pkg="image_view" type="image_view">
+    <remap from="image" to="/usb_cam/image_raw" />
+    <param name="autosize" value="true" />
+  </node>
+  -->
+  <!-- Console launch prefix -->
+  <arg name="launch_prefix" default=""/>
+  <!-- Weights folder -->>
+  <arg name="yolo_model/folder" default="$(find robot_vision_openvino)/models/yolov3"/>
+  <rosparam file="$(find robot_vision_openvino)/config/ros.yaml" command="load" ns="yolo_ros" />
+  <rosparam file="$(find robot_vision_openvino)/config/yolov3.yaml" command="load" ns="yolo_ros" />
+  <node name="yolo_ros" pkg="robot_vision_openvino" type="yolo_ros" output="screen" launch-prefix="$(arg launch_prefix)">
+    <param name="yolo_model/folder" value="$(arg yolo_model/folder)" />
+  </node>
+  <!-- <node name="soundplay_node" pkg="sound_play" type="soundplay_node.py" /> -->
+  <node name="delivery_detection_node" pkg="wqf7010_aa_prototype_development" type="delivery_detection_node.py" output="screen" />
+</launch>
